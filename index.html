@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rizhygeniy — Рыжий Гений, ролики «Что если?»</title>
+<meta name="description" content="Рыжий Гений — YouTube-канал с 2D-анимацией в формате «что если»: необычные гипотезы, разобранные шаг за шагом, от забавных до пугающих.">
+<meta property="og:title" content="rizhygeniy — Рыжий Гений">
+<meta property="og:description" content="2D-анимация в формате «что если»: необычные гипотезы, разобранные шаг за шагом.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Onest:wght@400;500;700&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* Идея вёрстки: тетрадь в клетку, где проверяют гипотезы. Одна колонка, рыжий акцент, шкала «забавно → пугающе» как главный элемент. */
+:root {
+  --paper: #EDF1F5;
+  --grid: rgba(31, 64, 128, .10);
+  --ink: #131C33;
+  --muted: #4C5874;
+  --accent: #E8590C;
+  --on-accent: #131C33;
+  --marker: #FFD43B;
+  --on-marker: #131C33;
+  --scare: #A61E4D;
+  --surface: #FFFFFF;
+  --line: rgba(19, 28, 51, .18);
+  --panel-bg: #131C33;
+  --panel-fg: #EAF0FA;
+  --panel-muted: #A9B6D1;
+  --font-display: "Unbounded", "Arial Black", "Segoe UI", sans-serif;
+  --font-body: "Onest", "Segoe UI", Roboto, Arial, sans-serif;
+  --font-hand: "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0F1627;
+    --grid: rgba(140, 170, 230, .08);
+    --ink: #EAF0FA;
+    --muted: #9AA8C4;
+    --accent: #FF8A3D;
+    --scare: #F0508A;
+    --surface: #172038;
+    --line: rgba(234, 240, 250, .18);
+    --panel-bg: #1B2644;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0F1627;
+  --grid: rgba(140, 170, 230, .08);
+  --ink: #EAF0FA;
+  --muted: #9AA8C4;
+  --accent: #FF8A3D;
+  --scare: #F0508A;
+  --surface: #172038;
+  --line: rgba(234, 240, 250, .18);
+  --panel-bg: #1B2644;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+
+/* Шапка */
+.top {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding-top: 18px; padding-bottom: 18px;
+}
+.brand {
+  font-family: var(--font-display); font-weight: 900; font-size: 1rem;
+  letter-spacing: -.01em; text-decoration: none; display: flex; align-items: center; gap: 10px;
+}
+.brand i {
+  width: 14px; height: 14px; border-radius: 50%; background: var(--accent); display: block;
+}
+.top a.small {
+  font-weight: 700; font-size: .9rem; text-decoration: none;
+  border-bottom: 2px solid var(--accent); padding-bottom: 2px;
+}
+
+/* Первый экран */
+.hero { padding-top: 28px; padding-bottom: 56px; }
+.eyebrow {
+  font-family: var(--font-hand); font-size: 1.5rem; line-height: 1.1; color: var(--accent);
+  margin: 0 0 6px; transform: rotate(-2deg); transform-origin: left;
+}
+h1 {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(3.1rem, 17vw, 9.5rem);
+  line-height: .92; letter-spacing: -.045em; margin: 0; text-transform: uppercase;
+}
+h1 mark {
+  background: var(--marker); color: var(--on-marker);
+  padding: 0 .08em; margin-left: -.08em;
+  box-decoration-break: clone; -webkit-box-decoration-break: clone;
+}
+h1 b { color: var(--accent); font-weight: 900; }
+.lede {
+  max-width: 34em; font-size: 1.15rem; margin: 22px 0 0; color: var(--ink);
+}
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-body); font-weight: 700; font-size: 1rem;
+  padding: 13px 20px; border-radius: 999px; text-decoration: none;
+  border: 2px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.btn.primary {
+  background: var(--accent); color: var(--on-accent); border-color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.btn:hover { transform: translate(-1px, -1px); }
+.btn.primary:hover { box-shadow: 6px 6px 0 var(--ink); }
+.btn svg { width: 16px; height: 16px; flex: none; }
+
+/* Шкала */
+.scale {
+  margin-top: 44px; background: var(--surface); border: 2px solid var(--ink);
+  border-radius: 18px; padding: 18px 18px 20px; box-shadow: 6px 6px 0 var(--ink);
+}
+.scale-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.scale-head span { font-size: .85rem; color: var(--muted); font-weight: 500; }
+.scale-head strong {
+  font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em;
+}
+.stage { position: relative; height: 96px; margin-top: 6px; --p: 38; }
+.man {
+  position: absolute; bottom: 0; width: 64px; height: 96px;
+  left: calc((100% - 64px) * var(--p) / 100);
+}
+.man svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.man .st { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; fill: none; }
+.man .head { fill: var(--surface); stroke: var(--ink); stroke-width: 4; }
+.man .hair { fill: var(--accent); stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; }
+.man .eye { fill: var(--ink); }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none; display: block; width: 100%; margin: 0;
+  height: 30px; background: transparent; cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 14px; border-radius: 999px; border: 2px solid var(--ink);
+  background: linear-gradient(90deg, var(--marker), var(--accent) 55%, var(--scare));
+}
+input[type="range"]::-moz-range-track {
+  height: 10px; border-radius: 999px; border: 2px solid var(--ink);
+  background: linear-gradient(90deg, var(--marker), var(--accent) 55%, var(--scare));
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 28px; height: 28px; margin-top: -9px;
+  border-radius: 50%; background: var(--surface); border: 3px solid var(--ink);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 22px; height: 22px; border-radius: 50%; background: var(--surface); border: 3px solid var(--ink);
+}
+.ends { display: flex; justify-content: space-between; font-size: .85rem; font-weight: 700; margin-top: 4px; }
+.scale-note {
+  font-family: var(--font-hand); font-size: 1.45rem; line-height: 1.15; margin: 10px 0 0; min-height: 1.2em;
+}
+
+/* Разделы */
+section.wrap { padding-top: 48px; padding-bottom: 48px; border-top: 2px solid var(--ink); }
+h2 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(1.45rem, 6vw, 2.5rem); line-height: 1.05; letter-spacing: -.03em;
+  margin: 0 0 22px; text-wrap: balance;
+}
+p { margin: 0; }
+.muted { color: var(--muted); }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+.steps li { display: grid; grid-template-columns: 3.2rem 1fr; gap: 6px 14px; align-items: start; }
+.steps .n {
+  font-family: var(--font-display); font-weight: 900; font-size: 1.6rem; line-height: 1;
+  color: var(--accent); font-variant-numeric: tabular-nums; padding-top: 2px;
+}
+.steps h3 { font-size: 1.15rem; margin: 0 0 4px; font-weight: 700; }
+.steps p { color: var(--muted); max-width: 36em; }
+
+.topics { margin: 0; display: grid; gap: 0; }
+.topics div {
+  display: grid; grid-template-columns: 8.5rem 1fr; gap: 12px; align-items: baseline;
+  padding: 14px 0; border-bottom: 1px solid var(--line);
+}
+.topics div:first-child { border-top: 1px solid var(--line); }
+.topics dt { font-family: var(--font-display); font-weight: 700; font-size: .95rem; letter-spacing: -.02em; }
+.topics dd { margin: 0; color: var(--muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; padding: 0; list-style: none; }
+.tags li {
+  font-size: .85rem; font-weight: 500; padding: 5px 12px; border-radius: 999px;
+  border: 1.5px solid var(--ink); background: var(--surface);
+}
+
+/* Блок с видео */
+.watch {
+  background: var(--panel-bg); color: var(--panel-fg);
+  border-radius: 22px; padding: 28px 22px; display: grid; gap: 22px; align-items: center;
+}
+.watch h2 { margin-bottom: 10px; }
+.watch p { color: var(--panel-muted); max-width: 30em; }
+.play {
+  width: 84px; height: 84px; border-radius: 50%; background: var(--accent);
+  display: grid; place-items: center; flex: none;
+}
+.play svg { width: 34px; height: 34px; margin-left: 5px; fill: var(--on-accent); }
+.watch .btn { border-color: var(--panel-fg); color: var(--panel-fg); }
+.watch .btn.primary { color: var(--on-accent); border-color: var(--panel-fg); box-shadow: 4px 4px 0 var(--panel-fg); }
+.watch .btn.primary:hover { box-shadow: 6px 6px 0 var(--panel-fg); }
+
+/* Идея */
+.idea-form { margin-top: 22px; display: grid; gap: 12px; max-width: 640px; }
+.idea-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: var(--surface); border: 2px solid var(--ink); border-radius: 16px; padding: 12px 14px;
+}
+.idea-row label { font-family: var(--font-display); font-weight: 700; font-size: 1rem; letter-spacing: -.02em; }
+.idea-row input {
+  flex: 1 1 12rem; min-width: 0; border: 0; border-bottom: 2px dashed var(--muted);
+  background: transparent; color: var(--ink); font: inherit; font-size: 1.05rem; padding: 6px 2px;
+}
+.idea-row input::placeholder { color: var(--muted); opacity: 1; }
+.idea-row input:focus { outline: none; border-bottom-color: var(--accent); border-bottom-style: solid; }
+.idea-row em { font-style: normal; font-family: var(--font-display); font-weight: 900; color: var(--accent); font-size: 1.3rem; }
+#idea-status { font-size: .95rem; color: var(--muted); min-height: 1.5em; }
+
+.tg { display: grid; gap: 18px; align-items: center; }
+.tg h2 { margin-bottom: 8px; }
+
+footer { border-top: 2px solid var(--ink); padding: 22px 0 36px; font-size: .9rem; color: var(--muted); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; }
+footer a { font-weight: 700; color: var(--ink); }
+
+@media (min-width: 720px) {
+  body { font-size: 18px; }
+  .hero { padding-top: 48px; padding-bottom: 72px; }
+  section.wrap { padding-top: 64px; padding-bottom: 64px; }
+  .steps { grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .steps li { grid-template-columns: 1fr; }
+  .steps .n { font-size: 2.2rem; }
+  .watch { grid-template-columns: auto 1fr auto; padding: 36px; gap: 28px; }
+  .tg { grid-template-columns: 1fr auto; }
+  .scale { padding: 22px 26px 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="wrap top">
+  <a class="brand" href="#top"><i></i>rizhygeniy</a>
+  <a class="small" href="https://www.youtube.com/channel/UCkkFcK4ST4lPfAIyaiL-Oqg">Канал на YouTube</a>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="eyebrow">2D-анимация на YouTube</p>
+    <h1>Что <mark>если</mark><b>?</b></h1>
+    <p class="lede">Рыжий Гений берёт необычную гипотезу и разбирает её шаг за шагом. Одни ролики получаются забавными, другие пугающими.</p>
+    <div class="actions">
+      <a class="btn primary" href="https://www.youtube.com/channel/UCkkFcK4ST4lPfAIyaiL-Oqg">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5v13l11-6.5z" fill="currentColor"/></svg>
+        Смотреть ролики
+      </a>
+      <a class="btn" href="https://www.youtube.com/channel/UCkkFcK4ST4lPfAIyaiL-Oqg?sub_confirmation=1">Подписаться</a>
+    </div>
+
+    <div class="scale" aria-label="Шкала настроения ролика">
+      <div class="scale-head">
+        <span>Чем закончится гипотеза</span>
+        <strong id="mood-label">Странно</strong>
+      </div>
+      <div class="stage" id="stage">
+        <div class="man" aria-hidden="true">
+          <svg viewBox="0 0 64 96">
+            <line class="st" x1="32" y1="42" x2="32" y2="68"/>
+            <line class="st" x1="32" y1="50" x2="16" y2="60"/>
+            <line class="st" x1="32" y1="50" x2="48" y2="60"/>
+            <line class="st" x1="32" y1="68" x2="20" y2="92"/>
+            <line class="st" x1="32" y1="68" x2="44" y2="92"/>
+            <polygon class="hair" points="14,20 16,6 23,13 28,2 33,12 40,3 43,13 50,8 50,22"/>
+            <circle class="head" cx="32" cy="26" r="16"/>
+            <circle class="eye" id="eye-l" cx="26" cy="24" r="2.2"/>
+            <circle class="eye" id="eye-r" cx="38" cy="24" r="2.2"/>
+            <path class="st" id="mouth" d="M25 32 Q32 37 39 32" style="stroke-width:3"/>
+          </svg>
+        </div>
+      </div>
+      <input type="range" id="mood" min="0" max="100" value="38" aria-label="От забавного до пугающего">
+      <div class="ends"><span>Забавно</span><span>Пугающе</span></div>
+      <p class="scale-note" id="mood-note">Что-то пошло не по плану.</p>
+    </div>
+  </div>
+
+  <section class="wrap" id="how">
+    <h2>Как устроен ролик</h2>
+    <ol class="steps">
+      <li>
+        <span class="n">01</span>
+        <div><h3>Гипотеза</h3><p>Всё начинается с вопроса «что если». Чем он необычнее, тем лучше.</p></div>
+      </li>
+      <li>
+        <span class="n">02</span>
+        <div><h3>Разбор по шагам</h3><p>Последствия идут одно за другим: что случится сразу, что потом и к чему это приведёт.</p></div>
+      </li>
+      <li>
+        <span class="n">03</span>
+        <div><h3>Финал</h3><p>Иногда выходит смешно, иногда страшно. Заранее угадать трудно.</p></div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="wrap" id="topics">
+    <h2>Из чего сделаны ролики</h2>
+    <dl class="topics">
+      <div><dt>Анимация</dt><dd>Каждая история нарисована в 2D.</dd></div>
+      <div><dt>Логика</dt><dd>Каждый следующий шаг вытекает из предыдущего.</dd></div>
+      <div><dt>Наука</dt><dd>Гипотеза проверяется на том, как устроен мир.</dd></div>
+      <div><dt>Философия</dt><dd>Некоторые вопросы остаются со зрителем после титров.</dd></div>
+    </dl>
+    <ul class="tags" aria-label="Темы канала">
+      <li>что если</li><li>24 часа</li><li>истории</li><li>2D-анимация</li><li>мультсериалы</li>
+    </ul>
+  </section>
+
+  <section class="wrap" id="watch">
+    <div class="watch">
+      <div class="play" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 1.5v13l11-6.5z"/></svg></div>
+      <div>
+        <h2>Все ролики на канале</h2>
+        <p>Новые гипотезы выходят на YouTube. Подпишитесь, чтобы не пропустить следующую.</p>
+      </div>
+      <a class="btn primary" href="https://www.youtube.com/channel/UCkkFcK4ST4lPfAIyaiL-Oqg">Открыть YouTube</a>
+    </div>
+  </section>
+
+  <section class="wrap" id="idea">
+    <h2>Предложите своё «что если»</h2>
+    <p class="muted" style="max-width:36em">Сценарии для новых роликов берутся из комментариев. Допишите гипотезу, скопируйте её и оставьте под любым видео.</p>
+    <form class="idea-form" id="idea-form">
+      <div class="idea-row">
+        <label for="idea-text">Что если</label>
+        <input type="text" id="idea-text" maxlength="140" autocomplete="off" placeholder="допишите свою гипотезу">
+        <em aria-hidden="true">?</em>
+      </div>
+      <div class="actions" style="margin-top:0">
+        <button class="btn primary" type="submit" id="idea-copy">Скопировать</button>
+        <a class="btn" href="https://www.youtube.com/channel/UCkkFcK4ST4lPfAIyaiL-Oqg">Перейти к комментариям</a>
+      </div>
+      <p id="idea-status" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section class="wrap" id="telegram">
+    <div class="tg">
+      <div>
+        <h2>Сообщество в Telegram</h2>
+        <p class="muted">YT COMMUNITY: t.me/ytmonetka</p>
+      </div>
+      <a class="btn" href="https://t.me/ytmonetka">Открыть Telegram</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>rizhygeniy. Ролики в формате «что если».</span>
+    <span><a href="https://www.youtube.com/channel/UCkkFcK4ST4lPfAIyaiL-Oqg">YouTube</a> · <a href="https://t.me/ytmonetka">Telegram</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var range = document.getElementById('mood');
+  var stage = document.getElementById('stage');
+  var label = document.getElementById('mood-label');
+  var note = document.getElementById('mood-note');
+  var mouth = document.getElementById('mouth');
+  var eyes = [document.getElementById('eye-l'), document.getElementById('eye-r')];
+  var moods = [
+    ['Забавно', 'Начинается как шутка.'],
+    ['Странно', 'Что-то пошло не по плану.'],
+    ['Тревожно', 'Последствия накапливаются.'],
+    ['Пугающе', 'Лучше бы не проверяли.']
+  ];
+
+  function render(v) {
+    v = Math.max(0, Math.min(100, v));
+    stage.style.setProperty('--p', v);
+    var m = moods[Math.min(3, Math.floor(v / 25))];
+    label.textContent = m[0];
+    note.textContent = m[1];
+    var bend = 39 - (v / 100) * 13;            // 39 = улыбка, 26 = испуг
+    mouth.setAttribute('d', 'M25 33 Q32 ' + bend.toFixed(1) + ' 39 33');
+    var r = (2 + (v / 100) * 1.8).toFixed(2);
+    eyes[0].setAttribute('r', r);
+    eyes[1].setAttribute('r', r);
+  }
+
+  range.addEventListener('input', function () { render(Number(range.value)); });
+
+  var target = Number(range.value);
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (calm || !window.requestAnimationFrame) {
+    render(target);
+  } else {
+    var start = null, touched = false;
+    range.addEventListener('pointerdown', function () { touched = true; });
+    range.addEventListener('keydown', function () { touched = true; });
+    render(target);
+    requestAnimationFrame(function step(t) {
+      if (touched) return;
+      if (start === null) start = t;
+      var k = Math.min(1, (t - start) / 1400);
+      var eased = 1 - Math.pow(1 - k, 3);
+      var v = Math.round(target * eased);
+      range.value = v;
+      render(v);
+      if (k < 1) requestAnimationFrame(step);
+    });
+  }
+
+  var form = document.getElementById('idea-form');
+  var input = document.getElementById('idea-text');
+  var status = document.getElementById('idea-status');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var raw = input.value.trim().replace(/[?!.\s]+$/, '');
+    if (!raw) {
+      status.textContent = 'Сначала допишите гипотезу.';
+      input.focus();
+      return;
+    }
+    var text = 'Что если ' + raw + '?';
+    var done = function () { status.textContent = 'Скопировано: «' + text + '». Вставьте в комментарий под роликом.'; };
+    var fail = function () { status.textContent = 'Скопировать не получилось. Выделите текст вручную: ' + text; };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, fail);
+      } else { fail(); }
+    } catch (err) { fail(); }
+  });
+})();
+</script>
+</body>
+</html>
